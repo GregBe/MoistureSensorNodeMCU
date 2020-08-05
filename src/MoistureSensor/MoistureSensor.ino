@@ -55,12 +55,13 @@ void loop()
 {
   sensorValue = analogRead(moistureSensorPin);
   Serial.println(sensorValue);
+
   if(sensorValue>450){
     ifttt.triggerEvent(EVENT_NAME_INFO,"Zu trocken", "Bitte gießen.");
   }else if(sensorValue>310){
     ifttt.triggerEvent(EVENT_NAME_INFO,"Genau richtig");
-  }else if(sensorValue <310){
+  }else if(sensorValue <310 && sensorValue > 50){
     ifttt.triggerEvent(EVENT_NAME_INFO,"Zu feucht", "Bitte weniger gießen.");
-  }
-  delay(10000);
+  } 
+   ESP.deepSleep(300e6); 
 }
