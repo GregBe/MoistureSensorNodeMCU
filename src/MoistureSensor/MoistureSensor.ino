@@ -5,9 +5,10 @@
 #include <WiFiManager.h> //https://github.com/tzapu/WiFiManager​ https://circuitdigest.com/microcontroller-projects/using-wifi-manager-on-nodemcu-to-scan-and-connect-wifi-networks
 #include <IFTTTMaker.h>
 #include <WiFiClientSecure.h>
+#include "arduino_secrets.h"
 
-#define KEY "SOME KEY"  // Get it from this page https://ifttt.com/services/maker/settings
-#define EVENT_NAME "SOME EVENT" // Name of your event name, set when you are creating the applet
+#define KEY IFTTT_KEY  // Get it from this page https://ifttt.com/services/maker/settings
+#define EVENT_NAME IFTTT_EVENT // Name of your event name, set when you are creating the applet
 
 WiFiClientSecure client;
 IFTTTMaker ifttt(KEY, client);
