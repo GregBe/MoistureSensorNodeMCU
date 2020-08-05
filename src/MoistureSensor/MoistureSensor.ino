@@ -8,7 +8,9 @@
 #include "arduino_secrets.h"
 
 #define KEY IFTTT_KEY  // Get it from this page https://ifttt.com/services/maker/settings
-#define EVENT_NAME IFTTT_EVENT // Name of your event name, set when you are creating the applet
+#define EVENT_NAME_DEVICE_ONLINE IFTTT_EVENT_DEVICE_ONLINE // Name of your event name, set when you are creating the applet
+#define EVENT_NAME_INFO IFTTT_EVENT_INFO // Name of your event name, set when you are creating the applet
+
 
 WiFiClientSecure client;
 IFTTTMaker ifttt(KEY, client);
@@ -17,7 +19,7 @@ int sensorValue = 0;
 
 void setup()
 {
-client.setInsecure(); //needed to not update the fingerprint for ifttt
+  client.setInsecure(); //needed to not update the fingerprint for ifttt
   WiFiManager wifiManager;
 
   Serial.begin(115200);
@@ -34,7 +36,7 @@ client.setInsecure(); //needed to not update the fingerprint for ifttt
   }
   Serial.println("connected");
 
-    if(ifttt.triggerEvent(EVENT_NAME)){
+  if(ifttt.triggerEvent(EVENT_NAME_DEVICE_ONLINE)){
     Serial.println("Successfully sent");
   } else
   {
@@ -44,14 +46,21 @@ client.setInsecure(); //needed to not update the fingerprint for ifttt
 
 /**
  * SensorValue interpretation:
- * Dry: (520 430]
- * Wet: (430 350]
- * Water: (350 260]
+ * Dry: (590 450]
+ * Wet: (450 310]
+ * Water: (310 170]
  * https://wiki.dfrobot.com/Capacitive_Soil_Moisture_Sensor_SKU_SEN0193
  * */
 void loop()
 {
   sensorValue = analogRead(moistureSensorPin);
   Serial.println(sensorValue);
-  delay(100);
+  if(sensorValue>450){
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Zu trocken", "Bitte gießen.");
+  }else if(sensorValue>310){
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Genau richtig");
+  }else if(sensorValue <310){
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Zu feucht", "Bitte weniger gießen.");
+  }
+  delay(10000);
 }
