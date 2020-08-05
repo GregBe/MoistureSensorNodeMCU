@@ -46,4 +46,4 @@
 
 ### secrets ###
 .secrets/*
-./src/MoistureSensor/arduino_secrets.h
+src/MoistureSensor/arduino_secrets.h
