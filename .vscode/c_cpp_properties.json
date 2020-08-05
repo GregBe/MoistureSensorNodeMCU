@@ -3,6 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\Greg\\Documents\\Arduino\\libraries\\HttpClient",
+                "C:\\Users\\Greg\\Documents\\Arduino\\libraries\\ArduinoJson\\src",
                 "C:\\Users\\Greg\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\libraries\\ESP8266WebServer\\src",
                 "C:\\Users\\Greg\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\libraries\\DNSServer\\src",
                 "C:\\Users\\Greg\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",

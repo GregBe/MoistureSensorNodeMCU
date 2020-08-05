@@ -3,12 +3,20 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h> //https://github.com/tzapu/WiFiManager​ https://circuitdigest.com/microcontroller-projects/using-wifi-manager-on-nodemcu-to-scan-and-connect-wifi-networks
+#include <IFTTTMaker.h>
+#include <WiFiClientSecure.h>
 
+#define KEY "SOME KEY"  // Get it from this page https://ifttt.com/services/maker/settings
+#define EVENT_NAME "SOME EVENT" // Name of your event name, set when you are creating the applet
+
+WiFiClientSecure client;
+IFTTTMaker ifttt(KEY, client);
 uint8_t moistureSensorPin = A0;
 int sensorValue = 0;
 
 void setup()
 {
+client.setInsecure(); //needed to not update the fingerprint for ifttt
   WiFiManager wifiManager;
 
   Serial.begin(115200);
@@ -23,7 +31,14 @@ void setup()
     ESP.reset();
     delay(5000);
   }
-  Serial.println("connected :)");
+  Serial.println("connected");
+
+    if(ifttt.triggerEvent(EVENT_NAME)){
+    Serial.println("Successfully sent");
+  } else
+  {
+    Serial.println("Failed!");
+  }
 }
 
 /**
