@@ -1,4 +1,6 @@
-#include "Arduino.h"
+
+#include <FS.h>
+#include <Arduino.h>
 #include <ESP8266WiFi.h> //https://github.com/esp8266/Arduino
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
@@ -8,8 +10,10 @@
 #include "arduino_secrets.h"
 
 #define KEY IFTTT_KEY  // Get it from this page https://ifttt.com/services/maker/settings
-#define EVENT_NAME_DEVICE_ONLINE IFTTT_EVENT_DEVICE_ONLINE // Name of your event name, set when you are creating the applet
-#define EVENT_NAME_INFO IFTTT_EVENT_INFO // Name of your event name, set when you are creating the applet
+
+//IFTTT Events
+#define EVENT_NAME_DEVICE_ONLINE "device_on" // Name of your event name, set when you are creating the applet
+#define EVENT_NAME_INFO "water_info" 
 
 
 WiFiClientSecure client;
@@ -35,13 +39,6 @@ void setup()
     delay(5000);
   }
   Serial.println("connected");
-
-  if(ifttt.triggerEvent(EVENT_NAME_DEVICE_ONLINE)){
-    Serial.println("Successfully sent");
-  } else
-  {
-    Serial.println("Failed!");
-  }
 }
 
 /**
@@ -57,11 +54,11 @@ void loop()
   Serial.println(sensorValue);
 
   if(sensorValue>450){
-    ifttt.triggerEvent(EVENT_NAME_INFO,"Zu trocken", "Bitte gießen.");
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Trocken",  String(sensorValue));
   }else if(sensorValue>310){
-    ifttt.triggerEvent(EVENT_NAME_INFO,"Genau richtig");
-  }else if(sensorValue <310 && sensorValue > 50){
-    ifttt.triggerEvent(EVENT_NAME_INFO,"Zu feucht", "Bitte weniger gießen.");
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Feucht", String(sensorValue));
+  }else if(sensorValue <310){
+    ifttt.triggerEvent(EVENT_NAME_INFO,"Nass",  String(sensorValue));
   } 
-   ESP.deepSleep(300e6); 
+   ESP.deepSleep(10e6); 
 }
