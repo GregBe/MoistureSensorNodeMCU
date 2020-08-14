@@ -57,8 +57,21 @@ void loop()
     ifttt.triggerEvent(EVENT_NAME_INFO,"Trocken",  String(sensorValue));
   }else if(sensorValue>310){
     ifttt.triggerEvent(EVENT_NAME_INFO,"Feucht", String(sensorValue));
-  }else if(sensorValue <310){
+  }else if(sensorValue <310 && sensorValue >10){
     ifttt.triggerEvent(EVENT_NAME_INFO,"Nass",  String(sensorValue));
   } 
-   ESP.deepSleep(10e6); 
+  Serial.println("Messung abgeschlossen, lege mich in 5s schlafen");
+  delay(5000);
+  if(Serial.available()){
+   flashMode(); 
+  }else{
+   ESP.deepSleep(86400e6); 
+  }
+}
+
+void flashMode(){
+  while(true){
+    Serial.println("flash mode");
+    delay(1000);
+  }
 }
